@@ -4,6 +4,7 @@ import java.util.Set;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -40,7 +41,7 @@ public class VoidRelicItem extends Item {
                     : setAnchor(serverLevel, serverPlayer, stack);
         } catch (RuntimeException e) {
             VoidRelicMod.LOGGER.error("Void Relic failed while being used", e);
-            message(player, "message.void_relic.error", ChatFormatting.RED);
+            message(serverPlayer, "message.void_relic.error", ChatFormatting.RED);
             return InteractionResult.FAIL;
         }
     }
@@ -50,9 +51,9 @@ public class VoidRelicItem extends Item {
                 level.dimension(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot()));
 
         RelicEffects.anchorSet(level, player.position());
-        player.displayClientMessage(Component.translatable("message.void_relic.anchor_set",
+        actionBar(player, Component.translatable("message.void_relic.anchor_set",
                 Math.round(player.getX()), Math.round(player.getY()), Math.round(player.getZ()))
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         return InteractionResult.SUCCESS;
     }
 
@@ -72,8 +73,8 @@ public class VoidRelicItem extends Item {
 
         if (player.getCooldowns().isOnCooldown(stack)) {
             int seconds = (int) Math.ceil(player.getCooldowns().getCooldownPercent(stack, 0.0F) * (COOLDOWN_TICKS / 20.0));
-            player.displayClientMessage(Component.translatable("message.void_relic.cooldown", Math.max(1, seconds))
-                    .withStyle(ChatFormatting.RED), true);
+            actionBar(player, Component.translatable("message.void_relic.cooldown", Math.max(1, seconds))
+                    .withStyle(ChatFormatting.RED));
             RelicEffects.denied(level, player.position());
             return InteractionResult.FAIL;
         }
@@ -95,7 +96,11 @@ public class VoidRelicItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    private static void message(Player player, String key, ChatFormatting color) {
-        player.displayClientMessage(Component.translatable(key).withStyle(color), true);
+    private static void message(ServerPlayer player, String key, ChatFormatting color) {
+        actionBar(player, Component.translatable(key).withStyle(color));
+    }
+
+    private static void actionBar(ServerPlayer player, Component text) {
+        player.connection.send(new ClientboundSetActionBarTextPacket(text));
     }
 }
