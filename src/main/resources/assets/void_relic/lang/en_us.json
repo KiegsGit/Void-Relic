@@ -1,0 +1,10 @@
+{
+  "item.void_relic.void_relic": "Void Relic",
+  "message.void_relic.anchor_set": "Rift Anchor set at %s, %s, %s",
+  "message.void_relic.returned": "Returned through the rift",
+  "message.void_relic.no_anchor": "No Rift Anchor set. Right-click to set one",
+  "message.void_relic.wrong_dimension": "The anchor is in another dimension",
+  "message.void_relic.unsafe": "The anchor location is not safe",
+  "message.void_relic.cooldown": "Void Relic recharging: %s s",
+  "message.void_relic.error": "The Void Relic flickered. Try again"
+}

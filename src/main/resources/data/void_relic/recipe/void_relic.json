@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "AOA",
+    "OEO",
+    "APA"
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "O": "minecraft:obsidian",
+    "E": "minecraft:echo_shard",
+    "P": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "void_relic:void_relic",
+    "count": 1
+  }
+}
